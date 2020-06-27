@@ -1,0 +1,47 @@
+#btn-div{
+    margin-left: 50px;
+}
+#body-div{
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.divztree1{
+    width:300px;
+
+    height:500px;
+
+    margin:50px auto;
+
+    line-height: 200px;
+    float: left;
+
+    margin-left: 100px;
+
+    text-align: center;
+
+    background: #fff6ef;
+
+    border:2px solid #ebc9ca;
+
+    box-shadow: inset 5px 5px 20px pink , 5px 5px 20px pink ;
+}
+.divztree{
+    width:50%;
+
+    height:500px;
+
+    margin:50px auto;
+
+    /*line-height: 200px;*/
+    float: left;
+
+    margin-left: 100px;
+
+    text-align: center;
+
+    background: #fff6ef;
+
+    border:2px solid #ebc9ca;
+
+    box-shadow: inset 5px 5px 20px pink , 5px 5px 20px pink ;
+}

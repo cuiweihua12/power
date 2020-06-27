@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mr.cwh.system.mapper.PowerMapper">
+  <resultMap id="BaseResultMap" type="com.mr.cwh.system.condition.PowerCondition">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="auth" jdbcType="VARCHAR" property="auth" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, `name`, pid, url, `method`, auth, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_power
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="select" resultType="com.mr.cwh.system.condition.PowerCondition">
+      select
+      <include refid="Base_Column_List" />
+      from sys_power
+    </select>
+  <select id="selectByRole" resultType="com.mr.cwh.system.condition.PowerCondition">
+    select p.* from sys_power p,sys_role_power rp where p.id = rp.power and rp.role = #{id}
+  </select>
+    <select id="selectByPidAndName" resultType="com.mr.cwh.system.condition.PowerCondition">
+      select
+      <include refid="Base_Column_List" />
+      from sys_power
+      where pid = #{pid}
+      and name = #{name}
+    </select>
+    <select id="selectByIdAndName" resultType="com.mr.cwh.system.condition.PowerCondition">
+      select
+      <include refid="Base_Column_List" />
+      from sys_power
+      where id = #{id}
+      and name = #{name}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_power
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.mr.cwh.system.condition.PowerCondition" useGeneratedKeys="true">
+    insert into sys_power (`name`, pid, url, 
+      `method`, auth, create_time
+      )
+    values (#{name,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
+      #{method,jdbcType=VARCHAR}, #{auth,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.mr.cwh.system.condition.PowerCondition" useGeneratedKeys="true">
+    insert into sys_power
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="method != null">
+        `method`,
+      </if>
+      <if test="auth != null">
+        auth,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="auth != null">
+        #{auth,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mr.cwh.system.condition.PowerCondition">
+    update sys_power
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        `method` = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="auth != null">
+        auth = #{auth,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mr.cwh.system.condition.PowerCondition">
+    update sys_power
+    set `name` = #{name,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      `method` = #{method,jdbcType=VARCHAR},
+      auth = #{auth,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

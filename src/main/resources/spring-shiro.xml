@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- 由于shiro比springMVC优先执行 所以注入service的时候会有问题，因此在此处在此扫描一下注解。。。 -->
+	<context:component-scan base-package="com.mr.cwh" />
+
+	<!-- 自定义realm -->
+	<bean id="passwordRealm" class="com.mr.cwh.system.shiro.PasswordRealm">
+		<!-- 引入自定义密码比较器 -->
+		<property name="credentialsMatcher" ref="credentialsMatcher"></property>
+	</bean>
+	<bean id="mailRealm" class="com.mr.cwh.system.shiro.MailRealm" >
+		<!--引入验证码比较-->
+		<property name="credentialsMatcher" ref="mail" />
+	</bean>
+
+	<!-- 自定义密码比较器 -->
+	<bean id="credentialsMatcher" class="com.mr.cwh.system.shiro.ShiroPassword"/>
+	<!-- 验证码比较器 -->
+	<bean id="mail" class="com.mr.cwh.system.shiro.ShrioMail"/>
+	<!-- Shiro通过SecurityManager来管理内部组件实例，并通过它来提供安全管理的各种服务 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="authenticator" ref="authenticator"/>
+		<!--<property name="realm" ref="sysRealm"/>--><!-- line: 13-->
+		<property name="realms" >
+			<list>
+				<ref bean="passwordRealm"/>
+				<ref bean="mailRealm" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置使用自定义认证器,可以实现多Realm认证,并且可以指定特定Realm处理特定类型的验证 -->
+	<bean id="authenticator" class="com.mr.cwh.system.shiro.CustomizedModularRealmAuthenticator">
+		<!-- 配置认证策略，只要有一个Realm认证成功即可，并且返回所有认证成功信息 -->
+		<property name="authenticationStrategy">
+			<bean class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy" />
+		</property>
+	</bean>
+
+	<!-- Shiro Filter 过滤器 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" /><!-- line:11 -->
+		<!-- 登录页面地址 -->
+		<property name="loginUrl" value="/page/login.jsp" />
+		<!-- 拦截规则  anon 代表不拦截  authc 代表拦截-->
+		<property name="filterChainDefinitions">
+			<value>
+				/static/** = anon<!-- 静态资源不拦截 -->
+				/user/login = anon<!-- 登录方法不拦截 -->
+				/user/logout = anon<!-- 注销方法不拦截 -->
+				/user/register = anon<!-- 注册不拦截 -->
+				/page/register.jsp = anon<!-- 注册不拦截 -->
+				/page/loginPhone.jsp = anon<!-- 注册不拦截 -->
+				/user/byAccount = anon <!-- 通过账户查询方法不拦截 -->
+				/user/loginEmail = anon <!-- 通过账户查询方法不拦截 -->
+				/mail/send = anon <!-- 通过账户查询方法不拦截 -->
+				/user/byEmail = anon <!-- 通过账户查询方法不拦截 -->
+				/** = authc <!-- 其他请求都拦截 -->
+			</value>
+		</property>
+	</bean>
+
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行-->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	<!-- AOP式方法级权限检查-->
+	 <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+	 <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+</beans>

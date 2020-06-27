@@ -1,0 +1,14 @@
+.error{
+	color:red;
+}
+ #fireworkd{
+            position: fixed;
+            top: 0px;
+            z-index: 9999;
+        }
+td{
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+table {table-layout:fixed;}
