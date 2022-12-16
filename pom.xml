@@ -11,7 +11,7 @@
 
     <!-- 各组件版本声明 -->
     <properties>
-        <spring.version>5.2.5.RELEASE</spring.version>
+        <spring.version>5.2.20.RELEASE</spring.version>
         <mybatis.version>3.5.4</mybatis.version>
         <mysql-connector.verision>8.0.19</mysql-connector.verision>
         <c3p0.version>0.9.5.5</c3p0.version>
